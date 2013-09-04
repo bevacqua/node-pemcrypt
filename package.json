@@ -1,0 +1,19 @@
+{
+  "name": "pemcrypt",
+  "description": "Read and write pem-encrypted JSON files",
+  "author": {
+    "name": "Nicolas Bevacqua",
+    "email": "ng@bevacqua.io",
+    "url": "http://bevacqua.io"
+  },
+  "version": "0.0.1",
+  "repository": "git@github.com:bevacqua/node-pemcrypt.git",
+  "engines": {
+    "node": ">=0.8"
+  },
+  "main": "pemcrypt.js",
+  "dependencies": {
+    "lodash": "1.3.1",
+    "ursa": "0.8.0"
+  }
+}
