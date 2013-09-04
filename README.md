@@ -41,9 +41,9 @@ var store = pemcrypt({
 });
 ```
 
-# #store.encrypt(storeName, persist)
+# #store.encrypt(sourceStore, targetStore)
 
-Encrypts a raw `.json` file. This method will take a file path relative to `cwd`, _without the `.json` extension_. The `persist` parameter will determine whether the results are dumped to an encrypted `.pemjson` file next to the `.json` one.
+Encrypts a raw `.json` file. This method will take a file path relative to `cwd`, _without the `.json` extension_. If `targetStore` equals `true`, the results are dumped to an encrypted `.pemjson` file next to the `.json` one. You can also pick a different name, if you want to keep secure and unsecure data in different places.
 
 This method is _synchronous_ and returns the encrypted data, too.
 
@@ -51,11 +51,14 @@ This method is _synchronous_ and returns the encrypted data, too.
 var pemjson = store.encrypt('env/defaults');
 
 console.log(pemjson); // garbage
+
+store.encrypt('env/defaults', true); // persisted to disk @ env/defaults.pemjson
+store.encrypt('env/defaults', 'secure/defaults'); // persisted to disk @ secure/defaults.pemjson
 ```
 
-# #store.decrypt(storeName, persist)
+# #store.decrypt(sourceStore, targetStore)
 
-Decrypts an encrypted `.pemjson` file. This method will take a file path relative to `cwd`, _without the `.pemjson` extension_. The `persist` parameter will determine whether the results are dumped to a decrypted `.json` file next to the `.pemjson` one.
+Decrypts an encrypted `.pemjson` file. This method will take a file path relative to `cwd`, _without the `.pemjson` extension_. If `targetStore` equals `true`, the results are dumped to an encrypted `.pemjson` file next to the `.json` one. You can also pick a different name, if you want to keep secure and unsecure data in different places.
 
 This method is _synchronous_ and returns the decrypted data, too.
 
@@ -63,4 +66,7 @@ This method is _synchronous_ and returns the decrypted data, too.
 var json = store.decrypt('env/defaults');
 
 console.log(json); // data!
+
+store.decrypt('env/defaults', true); // persisted to disk @ env/defaults.json
+store.decrypt('env/defaults', 'private/defaults'); // persisted to disk @ private/defaults.json
 ```
