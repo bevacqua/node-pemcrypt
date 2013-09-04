@@ -25,8 +25,11 @@ Pemcrypt.generateKey = function(pem, size){
     size = size || 8;
 
     var key = ursa.generatePrivateKey(1024 * size);
+    var pemKey = key.toPrivatePem();
+    
+    fs.writeFileSync(pem, pemKey, 'utf8');
 
-    fs.writeFileSync(pem, key.toPrivatePem(), 'utf8');
+    return pemKey;
 };
 
 function crypto(encrypt){

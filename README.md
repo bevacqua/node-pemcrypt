@@ -28,6 +28,8 @@ Generates a `.pem` file the first time around. You can save it wherever you won'
 pemcrypt.generateKey(pemfile);
 ```
 
+This method also returns the pem key right away if you want it for some reason.
+
 # #pemcrypt(options)
 
 Creates a pemcrypt `store` object. This will be used to `encrypt` and `decrypt` our files. This function will look for a `.pem` file and load it immediately, throwing if one isn't found.
