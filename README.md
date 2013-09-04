@@ -14,7 +14,7 @@ var pemcrypt = require('pemcrypt');
 
 # Purpose
 
-The goal of `pemcrypt` is to allow you to commit to source control sensible environment configuration values in an encrypted manner. All you need to do then, is get the private key originally used to encrypt a file, and you're good to go.
+The goal of `pemcrypt` is to allow you to commit sensible environment configuration values in an encrypted manner to source control. All you need to do then, is get the private key originally used to encrypt a file, and you're good to go.
 
 Ideally, this would only be used for development configuration values. You would distribute a `.pemjson` file with your module, and give the private key to decrypt the file to your contributors. The upside is that you won't need to give them a new `.json` file every time a value needs to change, but rather just encrypt it again, and push the new `.pemjson`.
 
