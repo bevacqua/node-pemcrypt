@@ -25,9 +25,11 @@ function Pemcrypt(options){
 Pemcrypt.generateKey = function(pem, size){
     size = size || 8;
 
+    var dir = path.dirname(pem);
     var key = ursa.generatePrivateKey(1024 * size);
     var pemKey = key.toPrivatePem();
 
+    mkdirp.sync(dir);
     fs.writeFileSync(pem, pemKey, 'utf8');
 
     return pemKey;
@@ -50,7 +52,7 @@ function crypto(encrypt){
         var out;
 
         if (encrypt) {
-            out = this.key.encrypt(data, 'utf8');   
+            out = this.key.encrypt(data, 'utf8');
         } else {
             out = this.key.decrypt(data, undefined, 'utf8');
         }
@@ -66,7 +68,7 @@ function crypto(encrypt){
             var targetDirectory = path.dirname(targetFile);
 
             mkdirp.sync(targetDirectory);
-            fs.writeFileSync(targetFile, out, 'utf8');  
+            fs.writeFileSync(targetFile, out, 'utf8');
         }
 
         return out;
