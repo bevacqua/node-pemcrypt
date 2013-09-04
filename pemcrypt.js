@@ -26,7 +26,7 @@ Pemcrypt.generateKey = function(pem, size){
 
     var key = ursa.generatePrivateKey(1024 * size);
     var pemKey = key.toPrivatePem();
-    
+
     fs.writeFileSync(pem, pemKey, 'utf8');
 
     return pemKey;
@@ -73,5 +73,7 @@ Pemcrypt.prototype.decrypt = crypto(false);
 
 module.exports = function(){
     var args = _.toArray(arguments);
-    return new (Function.prototype.bind.apply(Controller, [null].concat(args)))();
+    return new (Function.prototype.bind.apply(Pemcrypt, [null].concat(args)))();
 };
+
+module.exports.generateKey = Pemcrypt.generateKey.bind(Pemcrypt)
