@@ -22,7 +22,7 @@ Make sure you add `*.pem`, and whatever the decrypted JSON filename is to your `
 
 # #pemcrypt.generateKey
 
-Generates a `.pem` file the first time around. You can save it wherever you won't, but **don't ever commit it to source control**.
+Generates a `.pem` file the first time around. You can save it wherever you want, but **don't ever commit it to source control**.
 
 ```js
 pemcrypt.generateKey(pemfile);
