@@ -4,6 +4,7 @@ var _ = require('lodash');
 var fs = require('fs');
 var path = require('path');
 var ursa = require('ursa');
+var mkdirp = require('mkdirp');
 
 function Pemcrypt(options){
     options = options || {};
@@ -40,14 +41,14 @@ function crypto(encrypt){
         };
 
         var sourceFile = path.join(this.cwd, sourceStore + formats[encrypt]);
-        var targetFile;
 
         if (!fs.existsSync(sourceFile)){
-            throw new Error(sourceName + ' store not found: ' + sourceFile);
+            throw new Error(sourceStore + ' store not found: ' + sourceFile);
         }
 
         var data = fs.readFileSync(sourceFile);
-        
+        var out;
+
         if (encrypt) {
             out = this.key.encrypt(data, 'utf8');   
         } else {
@@ -61,7 +62,10 @@ function crypto(encrypt){
                 targetStore = sourceStore;
             }
 
-            targetFile = path.join(this.cwd, targetStore + formats[!encrypt]);
+            var targetFile = path.join(this.cwd, targetStore + formats[!encrypt]);
+            var targetDirectory = path.dirname(targetFile);
+
+            mkdirp.sync(targetDirectory);
             fs.writeFileSync(targetFile, out, 'utf8');  
         }
 
