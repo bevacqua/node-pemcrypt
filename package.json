@@ -6,7 +6,7 @@
     "email": "ng@bevacqua.io",
     "url": "http://bevacqua.io"
   },
-  "version": "0.0.1",
+  "version": "0.1.0",
   "repository": "git@github.com:bevacqua/node-pemcrypt.git",
   "engines": {
     "node": ">=0.8"
