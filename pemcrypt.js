@@ -12,7 +12,7 @@ function Pemcrypt(options){
     var pem = options.pem;
 
     if (!fs.existsSync(pem)){
-        throw new Error('Missing .pem file. Forgot to `generateKey` first?', pem);
+        throw new Error('Missing .pem file. Forgot to `generateKey` first? ' + pem);
     }
 
     this.cwd = cwd;
@@ -49,7 +49,7 @@ function crypto(encrypt){
         }
 
         if (!fs.existsSync(source)){
-            throw new Error(sourceName, 'store not found', source);
+            throw new Error(sourceName + ' store not found: ' + source);
         }
 
         var data = fs.readFileSync(source);
