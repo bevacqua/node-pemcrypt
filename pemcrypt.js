@@ -33,26 +33,20 @@ Pemcrypt.generateKey = function(pem, size){
 };
 
 function crypto(encrypt){
-    return function(storeName, persist){
-        var target, source, sourceName, out;
-        var pemjson = path.join(this.cwd, storeName + '.pemjson');
-        var rawjson = path.join(this.cwd, storeName + '.json');
+    return function(sourceStore, targetStore){
+        var formats = {
+            true: '.json',
+            false: '.pemjson'
+        };
 
-        if (encrypt) {
-            target = pemjson;
-            source = rawjson;
-            sourceName = 'Raw .json';
-        } else {
-            target = rawjson;
-            source = pemjson;
-            sourceName = 'Encrypted .pemjson';
+        var sourceFile = path.join(this.cwd, sourceStore + formats[encrypt]);
+        var targetFile;
+
+        if (!fs.existsSync(sourceFile)){
+            throw new Error(sourceName + ' store not found: ' + sourceFile);
         }
 
-        if (!fs.existsSync(source)){
-            throw new Error(sourceName + ' store not found: ' + source);
-        }
-
-        var data = fs.readFileSync(source);
+        var data = fs.readFileSync(sourceFile);
         
         if (encrypt) {
             out = this.key.encrypt(data, 'utf8');   
@@ -60,8 +54,15 @@ function crypto(encrypt){
             out = this.key.decrypt(data, undefined, 'utf8');
         }
 
-        if(persist){
-            fs.writeFileSync(target, out, 'utf8');  
+        if (targetStore) {
+
+            // if targetStore is true, just use the same path
+            if (targetStore === true) {
+                targetStore = sourceStore;
+            }
+
+            targetFile = path.join(this.cwd, targetStore + formats[!encrypt]);
+            fs.writeFileSync(targetFile, out, 'utf8');  
         }
 
         return out;
@@ -76,4 +77,4 @@ module.exports = function(){
     return new (Function.prototype.bind.apply(Pemcrypt, [null].concat(args)))();
 };
 
-module.exports.generateKey = Pemcrypt.generateKey.bind(Pemcrypt)
+module.exports.generateKey = Pemcrypt.generateKey.bind(Pemcrypt);
