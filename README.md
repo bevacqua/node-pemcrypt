@@ -20,7 +20,7 @@ Ideally, this would only be used for development configuration values. You would
 
 Make sure you add `*.pem`, and whatever the decrypted JSON filename is to your `.gitignore`. Commiting either of those would defeat the entire purpose of this module.
 
-# #pemcrypt.generateKey
+### #pemcrypt.generateKey
 
 Generates a `.pem` file the first time around. You can save it wherever you want, but **don't ever commit it to source control**.
 
@@ -41,7 +41,7 @@ var store = pemcrypt({
 });
 ```
 
-# #store.encrypt(sourceStore, targetStore)
+### #store.encrypt(sourceStore, targetStore)
 
 Encrypts a raw `.json` file. This method will take a file path relative to `cwd`, _without the `.json` extension_. If `targetStore` equals `true`, the results are dumped to an encrypted `.pemjson` file next to the `.json` one. You can also pick a different name, if you want to keep secure and unsecure data in different places.
 
@@ -56,7 +56,7 @@ store.encrypt('env/defaults', true); // persisted to disk @ env/defaults.pemjson
 store.encrypt('env/defaults', 'secure/defaults'); // persisted to disk @ secure/defaults.pemjson
 ```
 
-# #store.decrypt(sourceStore, targetStore)
+### #store.decrypt(sourceStore, targetStore)
 
 Decrypts an encrypted `.pemjson` file. This method will take a file path relative to `cwd`, _without the `.pemjson` extension_. If `targetStore` equals `true`, the results are dumped to an encrypted `.pemjson` file next to the `.json` one. You can also pick a different name, if you want to keep secure and unsecure data in different places.
 
