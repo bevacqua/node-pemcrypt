@@ -7,7 +7,7 @@ var ursa = require('ursa');
 var crypto = require('crypto');
 var mkdirp = require('mkdirp');
 
-function Pemcrypt(options){
+function Pemcrypt (options) {
     options = options || {};
 
     var cwd = options.cwd || process.cwd();
@@ -24,9 +24,9 @@ function Pemcrypt(options){
     this.raw = options.raw || '.json';
     this.secure = options.secure || '.pemjson';
     this.algorithm = options.algorithm || 'aes256';
-};
+}
 
-Pemcrypt.generateKey = function(pem, size){
+Pemcrypt.generateKey = function (pem, size) {
     size = size || 8;
 
     var dir = path.dirname(pem);
@@ -39,8 +39,8 @@ Pemcrypt.generateKey = function(pem, size){
     return pemKey;
 };
 
-function crypto(encrypt){
-    return function(sourceStore, targetStore){
+function crypto (encrypt) {
+    return function (sourceStore, targetStore) {
         var formats = {
             true: this.raw,
             false: this.secure
@@ -88,7 +88,7 @@ function encryption (data) {
 
     var pemKey = key.toPrivatePem();
     var cipher = crypto.createCipher(this.algorithm, pemKey);
-    var encrypted = cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
+    var encrypted = cipher.update(data, 'utf8', 'hex') + cipher.final('hex');
     return encrypted;
 }
 
@@ -100,14 +100,14 @@ function decryption (data) {
     }
     var pemKey = key.toPrivatePem();
     var decipher = crypto.createDecipher(this.algorithm, pemKey);
-    var decrypted = decipher.update(encrypted, 'hex', 'utf8') + decipher.final('utf8');
+    var decrypted = decipher.update(data, 'hex', 'utf8') + decipher.final('utf8');
     return decrypted;
 }
 
 Pemcrypt.prototype.encrypt = crypto(true);
 Pemcrypt.prototype.decrypt = crypto(false);
 
-module.exports = function(){
+module.exports = function () {
     var args = _.toArray(arguments);
     return new (Function.prototype.bind.apply(Pemcrypt, [null].concat(args)))();
 };
