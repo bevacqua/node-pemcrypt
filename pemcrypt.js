@@ -39,7 +39,7 @@ Pemcrypt.generateKey = function (pem, size) {
     return pemKey;
 };
 
-function crypto (encrypt) {
+function piper (encrypt) {
     return function (sourceStore, targetStore) {
         var formats = {
             true: this.raw,
@@ -104,8 +104,8 @@ function decryption (data) {
     return decrypted;
 }
 
-Pemcrypt.prototype.encrypt = crypto(true);
-Pemcrypt.prototype.decrypt = crypto(false);
+Pemcrypt.prototype.encrypt = piper(true);
+Pemcrypt.prototype.decrypt = piper(false);
 
 module.exports = function () {
     var args = _.toArray(arguments);
