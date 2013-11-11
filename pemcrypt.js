@@ -52,7 +52,7 @@ function piper (encrypt) {
             throw new Error(sourceStore + ' store not found: ' + sourceFile);
         }
 
-        var data = fs.readFileSync(sourceFile);
+        var data = fs.readFileSync(sourceFile, { encoding: 'utf8' });
         var out;
 
         if (encrypt) {
