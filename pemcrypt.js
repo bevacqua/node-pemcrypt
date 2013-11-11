@@ -56,9 +56,9 @@ function crypto(encrypt){
         var out;
 
         if (encrypt) {
-            out = encrypt.call(this, data);
+            out = encryption.call(this, data);
         } else {
-            out = decrypt.call(this, data);
+            out = decryption.call(this, data);
         }
 
         if (targetStore) {
@@ -79,7 +79,7 @@ function crypto(encrypt){
     };
 }
 
-function encrypt (data) {
+function encryption (data) {
     var key = this.key;
 
     if (this.algorithm === 'rsa') {
@@ -92,7 +92,7 @@ function encrypt (data) {
     return encrypted;
 }
 
-function decrypt (data) {
+function decryption (data) {
     var key = this.key;
 
     if (this.algorithm === 'rsa') {
