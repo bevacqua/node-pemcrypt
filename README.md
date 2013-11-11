@@ -16,11 +16,11 @@ var pemcrypt = require('pemcrypt');
 
 The goal of `pemcrypt` is to allow you to commit sensible environment configuration values in an encrypted manner to source control. All you need to do then, is get the private key originally used to encrypt a file, and you're good to go.
 
-Ideally, this would only be used for development configuration values. You would distribute a `.pemjson` file with your module, and give the private key to decrypt the file to your contributors. The upside is that you won't need to give them a new `.json` file every time a value needs to change, but rather just encrypt it again, and push the new `.pemjson`.
+Ideally, this would only be used for development configuration values. You would distribute a secure file with your module, and give the private key to decrypt the file to your contributors. The upside is that you won't need to give them a new private file every time a value needs to change, but rather just encrypt it again, and push the new secure file.
 
-Make sure you add `*.pem`, and whatever the decrypted JSON filename is to your `.gitignore`. Commiting either of those would defeat the entire purpose of this module.
+Make sure you add `*.pem`, and whatever the decrypted filename is, to your `.gitignore`. Commiting either of those would defeat the entire purpose of this module.
 
-### #pemcrypt.generateKey
+# #pemcrypt.generateKey
 
 Generates a `.pem` file the first time around. You can save it wherever you want, but **don't ever commit it to source control**.
 
@@ -30,7 +30,7 @@ pemcrypt.generateKey(pemfile);
 
 This method also returns the pem key right away if you want it for some reason.
 
-### #pemcrypt(options)
+# #pemcrypt(options)
 
 Creates a pemcrypt `store` object. This will be used to `encrypt` and `decrypt` our files. This function will look for a `.pem` file and load it immediately, throwing if one isn't found.
 
@@ -41,9 +41,19 @@ var store = pemcrypt({
 });
 ```
 
-### #store.encrypt(sourceStore, targetStore)
+The options let us determine the store _extensions_, for both the private and secure file names. These are the default values:
 
-Encrypts a raw `.json` file. This method will take a file path relative to `cwd`, _without the `.json` extension_. If `targetStore` equals `true`, the results are dumped to an encrypted `.pemjson` file next to the `.json` one. You can also pick a different name, if you want to keep secure and unsecure data in different places.
+```js
+{
+    "raw": ".json" // the extension for unsecured files,
+    "secure": ".pemjson", // the extension for encrypted files
+    "algorithm": "aes256" // algorithm used to encrypt and decrypt
+}
+```
+
+# #store.encrypt(sourceStore, targetStore)
+
+Encrypts a raw private file. This method will take a file path relative to `cwd`, _without the private extension_. If `targetStore` equals `true`, the results are dumped to an encrypted secure file next to the private one. You can also pick a different name, if you want to keep secure and unsecure data in different places.
 
 This method is _synchronous_ and returns the encrypted data, too.
 
@@ -56,9 +66,9 @@ store.encrypt('env/defaults', true); // persisted to disk @ env/defaults.pemjson
 store.encrypt('env/defaults', 'secure/defaults'); // persisted to disk @ secure/defaults.pemjson
 ```
 
-### #store.decrypt(sourceStore, targetStore)
+# #store.decrypt(sourceStore, targetStore)
 
-Decrypts an encrypted `.pemjson` file. This method will take a file path relative to `cwd`, _without the `.pemjson` extension_. If `targetStore` equals `true`, the results are dumped to an encrypted `.pemjson` file next to the `.json` one. You can also pick a different name, if you want to keep secure and unsecure data in different places.
+Decrypts an encrypted secure file. This method will take a file path relative to `cwd`, _without the secure extension_. If `targetStore` equals `true`, the results are dumped to an encrypted secure file next to the private one. You can also pick a different name, if you want to keep secure and unsecure data in different places.
 
 This method is _synchronous_ and returns the decrypted data, too.
 

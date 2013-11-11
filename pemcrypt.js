@@ -4,6 +4,7 @@ var _ = require('lodash');
 var fs = require('fs');
 var path = require('path');
 var ursa = require('ursa');
+var crypto = require('crypto');
 var mkdirp = require('mkdirp');
 
 function Pemcrypt(options){
@@ -13,13 +14,16 @@ function Pemcrypt(options){
     var pem = options.pem;
 
     if (!fs.existsSync(pem)){
-        throw new Error('Missing .pem file. Forgot to `generateKey` first? ' + pem);
+        throw new Error('Missing .pem file. Forgot to use `Pemcrypt.generateKey(filename, size)` first? ' + pem);
     }
 
     this.cwd = cwd;
     this.key = ursa.createPrivateKey(
         fs.readFileSync(pem)
     );
+    this.raw = options.raw || '.json';
+    this.secure = options.secure || '.pemjson';
+    this.algorithm = options.algorithm || 'aes256';
 };
 
 Pemcrypt.generateKey = function(pem, size){
@@ -38,8 +42,8 @@ Pemcrypt.generateKey = function(pem, size){
 function crypto(encrypt){
     return function(sourceStore, targetStore){
         var formats = {
-            true: '.json',
-            false: '.pemjson'
+            true: this.raw,
+            false: this.secure
         };
 
         var sourceFile = path.join(this.cwd, sourceStore + formats[encrypt]);
@@ -52,9 +56,9 @@ function crypto(encrypt){
         var out;
 
         if (encrypt) {
-            out = this.key.encrypt(data, 'utf8');
+            out = encrypt.call(this, data);
         } else {
-            out = this.key.decrypt(data, undefined, 'utf8');
+            out = decrypt.call(this, data);
         }
 
         if (targetStore) {
@@ -73,6 +77,31 @@ function crypto(encrypt){
 
         return out;
     };
+}
+
+function encrypt (data) {
+    var key = this.key;
+
+    if (this.algorithm === 'rsa') {
+        return key.encrypt(data, 'utf8');
+    }
+
+    var pemKey = key.toPrivatePem();
+    var cipher = crypto.createCipher(this.algorithm, pemKey);
+    var encrypted = cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
+    return encrypted;
+}
+
+function decrypt (data) {
+    var key = this.key;
+
+    if (this.algorithm === 'rsa') {
+        return key.decrypt(data, undefined, 'utf8');
+    }
+    var pemKey = key.toPrivatePem();
+    var decipher = crypto.createDecipher(this.algorithm, pemKey);
+    var decrypted = decipher.update(encrypted, 'hex', 'utf8') + decipher.final('utf8');
+    return decrypted;
 }
 
 Pemcrypt.prototype.encrypt = crypto(true);
